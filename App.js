@@ -1,17 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
+import { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { Button } from 'react-native-web';
-
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Hello</Text>
-      <StatusBar style="auto" />
-
-      <Button title='click me'/>
-    </View>
-  );
-}
+import { Button } from 'react-native';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 const styles = StyleSheet.create({
   container: {
@@ -21,3 +12,26 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+export default function App() {
+
+  const [number, setNumber] = useState(0);
+
+  const addOne = () => {
+    setNumber(number + 1);
+  };
+
+    const subtractOne = () => {
+      setNumber(number - 1);
+    };
+
+  return (
+    <SafeAreaProvider style={styles.container}>
+      <SafeAreaView>
+        <Button title='Add' onPress={() => addOne()} />
+        <Text>{number}</Text>
+        <Button title='Subtract' onPress={() => subtractOne()} />
+      </SafeAreaView>
+    </SafeAreaProvider>
+  );
+}
