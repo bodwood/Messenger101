@@ -1,8 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
-import { useState } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Button } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import * as SplashScreen from 'expo-splash-screen';
+
+SplashScreen.preventAutoHideAsync();
 
 const styles = StyleSheet.create({
   container: {
@@ -14,23 +17,28 @@ const styles = StyleSheet.create({
 });
 
 export default function App() {
+  const [appIsLoaded, setAppIsLoaded] = useState(false);
 
-  const [number, setNumber] = useState(0);
+  useEffect(() => {
+    setTimeout(() => {
+      setAppIsLoaded(true);
+    }, 2000);
+  });
 
-  const addOne = () => {
-    setNumber(number + 1);
-  };
+  const onLayout = useCallback(async () => {
+    if (appIsLoaded) {
+      await SplashScreen.hideAsync();
+    }
+  }, [appIsLoaded]);
 
-    const subtractOne = () => {
-      setNumber(number - 1);
-    };
+  if (!appIsLoaded) {
+    return null;
+  }
 
   return (
-    <SafeAreaProvider style={styles.container}>
+    <SafeAreaProvider style={styles.container} onLayout={onLayout()}>
       <SafeAreaView>
-        <Button title='Add' onPress={() => addOne()} />
-        <Text>{number}</Text>
-        <Button title='Subtract' onPress={() => subtractOne()} />
+        <Text>Hello</Text>
       </SafeAreaView>
     </SafeAreaProvider>
   );
